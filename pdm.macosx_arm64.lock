@@ -5,7 +5,7 @@
 groups = ["default", "convert2bop", "notebooks"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:f9ac073c46cc6ae34f77921407103eb49b46eb18e03559fcbe45a78932faf67f"
+content_hash = "sha256:6569711a10912f0fdc839637cc2580f141215359645940daa01ef4559d0bfb91"
 
 [[metadata.targets]]
 requires_python = ">=3.8"
