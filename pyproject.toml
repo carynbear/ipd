@@ -39,7 +39,7 @@ intrinsic-ipd-cli = "intrinsic_ipd.download_cli:main"
 Homepage = "https://github.com/intrinsic-ai/ipd"
 
 [build-system]
-requires = ["pdm-backend"]
+requires = ["pdm-backend", "cmake"]
 build-backend = "pdm.backend"
 
 [tool.pdm]
@@ -49,6 +49,7 @@ distribution = true
 convert2bop = [
     # "bop-toolkit @ git+https://github.com/thodan/bop_toolkit.git@master",
     "open3d>=0.18.0",
-    "pymeshlab>=2023.12.post2",
+    # "pymeshlab @ git+https://github.com/cnr-isti-vclab/PyMeshLab.git@master",
+    "pymeshlab @ git+https://github.com/alemuntoni/PyMeshLab.git",
     "-e file:///${PROJECT_ROOT}/bop_toolkit#egg=bop-toolkit-lib",
 ]
