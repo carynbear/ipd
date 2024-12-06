@@ -86,56 +86,106 @@ class CameraFramework(Enum):
     OPENGL = 3
 
     @staticmethod
-    def _flip_R(rotation_matrix: np.ndarray,
-               flip_x: bool = False,
-               flip_y: bool = False,
-               flip_z: bool = False) -> np.ndarray:
-        flipped_matrix = rotation_matrix.copy()
+    def flip_transformation_matrix(
+        transformation_matrix: np.ndarray,
+        flip_x: bool = False,
+        flip_y: bool = False,
+        flip_z: bool = False
+    ) -> np.ndarray:
+        """
+        Flip the axes of a 4x4 transformation matrix, including both rotation and translation.
+
+        Args:
+        transformation_matrix (np.ndarray): The 4x4 transformation matrix to modify.
+        flip_x (bool): Whether to flip the X-axis.
+        flip_y (bool): Whether to flip the Y-axis.
+        flip_z (bool): Whether to flip the Z-axis.
+
+        Returns:
+        np.ndarray: The flipped 4x4 transformation matrix.
+        """
+        flipped_matrix = transformation_matrix.copy()
+
+        # Column flipping for rotation (first 3 columns of the 4x4 matrix)
         if flip_x:
-            flipped_matrix[1:3, :] = -flipped_matrix[1:3, :]
+            flipped_matrix[:, 0] = -flipped_matrix[:, 0]  # Flip X-axis rotation
         if flip_y:
-            flipped_matrix[[0, 2], :] = -flipped_matrix[[0, 2], :]
+            flipped_matrix[:, 1] = -flipped_matrix[:, 1]  # Flip Y-axis rotation
         if flip_z:
-            flipped_matrix[:, [0, 1]] = -flipped_matrix[:, [0, 1]]
+            flipped_matrix[:, 2] = -flipped_matrix[:, 2]  # Flip Z-axis rotation
+
+        # Translation flipping (last column, first 3 elements)
+        if flip_x:
+            flipped_matrix[0, 3] = -flipped_matrix[0, 3]  # Flip X-axis translation
+        if flip_y:
+            flipped_matrix[1, 3] = -flipped_matrix[1, 3]  # Flip Y-axis translation
+        if flip_z:
+            flipped_matrix[2, 3] = -flipped_matrix[2, 3]  # Flip Z-axis translation
+
         return flipped_matrix
     
     @staticmethod
-    def _flip_t(translation_vector: np.ndarray,
-               flip_x: bool = False,
-               flip_y: bool = False,
-               flip_z: bool = False) -> np.ndarray:
-        flipped_vector = translation_vector.copy()
-        if flip_x:
-            flipped_vector[0] = -flipped_vector[0]
-        if flip_y:
-            flipped_vector[1] = -flipped_vector[1]
-        if flip_z:
-            flipped_vector[2] = -flipped_vector[2]
-        return flipped_vector
-    
-    @staticmethod
-    def convert(T, from_camera: CameraFramework, to_camera: CameraFramework) -> np.ndarray:
-        from_to = (from_camera, to_camera)
-        transform = (False, False, False)
-        if from_to == (CameraFramework.OPENCV, CameraFramework.PYTORCH3D) or\
-        from_to == (CameraFramework.PYTORCH3D, CameraFramework.OPENCV):
-            transform = (True, True, False)
-        elif from_to == (CameraFramework.OPENCV, CameraFramework.OPENGL) or\
-        from_to == (CameraFramework.OPENGL, CameraFramework.OPENCV):
-            transform = (False, True, True)
-        elif from_to == (CameraFramework.PYTORCH3D, CameraFramework.OPENGL) or\
-        from_to == (CameraFramework.OPENGL, CameraFramework.PYTORCH3D):
-            transform = (True, False, True)
+    def convert(
+        T: np.ndarray, 
+        from_camera: CameraFramework, 
+        to_camera: CameraFramework
+    ) -> np.ndarray:
+        """
+        Convert a 4x4 transformation matrix between different camera coordinate systems.
 
+        This function adjusts a transformation matrix `T` to account for differences in axis 
+        conventions between specified camera frameworks (e.g., OpenCV, PyTorch3D, OpenGL). 
+        Depending on the source (`from_camera`) and target (`to_camera`) frameworks, it flips
+        certain axes of the matrix.
+
+        Args:
+            T (np.ndarray): The 4x4 transformation matrix to convert.
+            from_camera (CameraFramework): The source camera framework.
+            to_camera (CameraFramework): The target camera framework.
+
+        Returns:
+            np.ndarray: The converted 4x4 transformation matrix.
+
+        Framework Conversion Notes:
+            - OpenCV <-> PyTorch3D: Flips X and Y axes.
+            - OpenCV <-> OpenGL: Flips Y and Z axes.
+            - PyTorch3D <-> OpenGL: Flips X and Z axes.
+            - Identity conversion (no axis flips) if `from_camera` and `to_camera` are the same.
+
+        Example Usage:
+            T = np.array([
+                [1, 0, 0, 3],
+                [0, 1, 0, 4],
+                [0, 0, 1, 5],
+                [0, 0, 0, 1]
+            ])
+            converted_T = CameraFramework.convert(T, CameraFramework.OPENCV, CameraFramework.PYTORCH3D)
+        """
+        # Pair the source and target frameworks
+        from_to = (from_camera, to_camera)
+        
+        # Default transformation (no axis flips)
+        transform = (False, False, False)
+        
+        # Determine axis flipping based on framework pairs
+        if from_to == (CameraFramework.OPENCV, CameraFramework.PYTORCH3D) or \
+        from_to == (CameraFramework.PYTORCH3D, CameraFramework.OPENCV):
+            transform = (True, True, False)  # Flip X and Y axes
+        elif from_to == (CameraFramework.OPENCV, CameraFramework.OPENGL) or \
+            from_to == (CameraFramework.OPENGL, CameraFramework.OPENCV):
+            transform = (False, True, True)  # Flip Y and Z axes
+        elif from_to == (CameraFramework.PYTORCH3D, CameraFramework.OPENGL) or \
+            from_to == (CameraFramework.OPENGL, CameraFramework.PYTORCH3D):
+            transform = (True, False, True)  # Flip X and Z axes
+
+        # If no transformation is required, return the input matrix as-is
         if transform == (False, False, False):
             return T
-    
-        r = CameraFramework._flip_R(T[:3, :3], flip_x=transform[0], flip_y=transform[1], flip_z=transform[2])
-        t = CameraFramework._flip_t(T[:3, 3], flip_x=transform[0], flip_y=transform[1], flip_z=transform[2])
-        output = np.eye(4)
-        output[:3, :3] = r
-        output[:3, 3] = t
-        return output
+
+        # Apply the axis flipping transformation
+        return CameraFramework.flip_transformation_matrix(
+            T, flip_x=transform[0], flip_y=transform[1], flip_z=transform[2]
+        )
 
 
 class IPDLightCondition(Enum):
