@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 import os, logging
+import platform
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -730,11 +731,12 @@ class IPDReader:
         
         # check that rendering libraries are installed, if not, prompt user to install optional dependencies
         import pyrender
-
-        if 'PYOPENGL_PLATFORM' not in os.environ or os.environ['PYOPENGL_PLATFORM'] not in ["egl", "osmesa"]:
-            logging.warn("You should set the PYOPENGL_PLATFORM environment variable before importing pyrender or any other OpenGL library. \n\tSetting PYOPENGL_PLATFORM=`egl`. \n\tSee https://pyrender.readthedocs.io/en/latest/examples/offscreen.html ")
-            os.environ['PYOPENGL_PLATFORM'] = "egl"
-            reload(pyrender)
+        system = platform.system().lower()
+        if system == 'linux':
+            if 'PYOPENGL_PLATFORM' not in os.environ or os.environ['PYOPENGL_PLATFORM'] not in ["egl", "osmesa"]:
+                logging.warning("You should set the PYOPENGL_PLATFORM environment variable before importing pyrender or any other OpenGL library. \n\tSetting PYOPENGL_PLATFORM=`egl`. \n\tSee https://pyrender.readthedocs.io/en/latest/examples/offscreen.html ")
+                os.environ['PYOPENGL_PLATFORM'] = "egl"
+                reload(pyrender)
         
         with DisableLogger():
             img = self.get_img(scene, self.camera.images[0])

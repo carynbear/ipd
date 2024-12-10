@@ -50,8 +50,6 @@ distribution = true
 convert2bop = [
     # "bop-toolkit @ git+https://github.com/thodan/bop_toolkit.git@master",
     "open3d>=0.18.0",
-    # "pymeshlab @ git+https://github.com/cnr-isti-vclab/PyMeshLab.git@master",
-    "pymeshlab @ git+https://github.com/alemuntoni/PyMeshLab.git@v2024.3 ; sys_platform=='darwin' and platform_machine=='arm64'",
-    "pymeshlab>=2023.12.post2 ; sys_platform!='darwin' or platform_machine!='arm64'",
+    "pymeshlab>=2023.12.post2",
     "-e file:///${PROJECT_ROOT}/bop_toolkit#egg=bop-toolkit-lib",
 ]

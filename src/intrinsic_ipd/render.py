@@ -1,3 +1,4 @@
+import platform
 from . import IPDReader, IPDImage, CameraFramework
 import pyrender
 import numpy as np
@@ -27,11 +28,12 @@ def render_scene(
     Returns:
         numpy.ndarray: The rendered image with the scene overlaid.
     """
-
-    if 'PYOPENGL_PLATFORM' not in os.environ or os.environ['PYOPENGL_PLATFORM'] not in ["egl", "osmesa"]:
-        logging.warn("Set PYOPENGL_PLATFORM environment variable before importing pyrender or any other OpenGL library. \n\tSetting to PYOPENGL_PLATFORM=`egl`. \n\tSee https://pyrender.readthedocs.io/en/latest/examples/offscreen.html ")
-        os.environ['PYOPENGL_PLATFORM'] = "egl"
-        reload(pyrender)
+    system = platform.system().lower()
+    if system == 'linux':
+        if 'PYOPENGL_PLATFORM' not in os.environ or os.environ['PYOPENGL_PLATFORM'] not in ["egl", "osmesa"]:
+            logging.warning("Set PYOPENGL_PLATFORM environment variable before importing pyrender or any other OpenGL library. \n\tSetting to PYOPENGL_PLATFORM=`egl`. \n\tSee https://pyrender.readthedocs.io/en/latest/examples/offscreen.html ")
+            os.environ['PYOPENGL_PLATFORM'] = "egl"
+            reload(pyrender)
     
     # Render ground truth poses if poses not provided
     if poses is None:
