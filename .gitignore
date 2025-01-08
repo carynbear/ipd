@@ -1,6 +1,7 @@
 datasets
 results
 bop_datasets
+datasets_bop
 test.ipynb
 
 # Byte-compiled / optimized / DLL files
