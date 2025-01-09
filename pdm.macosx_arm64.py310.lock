@@ -5,7 +5,7 @@
 groups = ["default", "convert2bop", "notebooks"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:cee5241e4affde56de30dd9151ada72fbaf213594c6fca538a1c94393b368be6"
+content_hash = "sha256:3bceb4659393483e634e4b53a97638f4072aa7237ec4ab963d5cf15a455c4b94"
 
 [[metadata.targets]]
 requires_python = ">=3.8"
@@ -642,6 +642,23 @@ files = [
     {file = "freetype_py-2.4.0-py3-none-musllinux_1_1_aarch64.whl", hash = "sha256:c6276d92ac401c8ce02ea391fc854de413b01a8d835fb394ee5eb6f04fc947f5"},
     {file = "freetype_py-2.4.0-py3-none-musllinux_1_1_x86_64.whl", hash = "sha256:9614f68876e9c62e821dfa811dd6160e00279d9d98cf60118cb264be48da1472"},
     {file = "freetype_py-2.4.0-py3-none-win_amd64.whl", hash = "sha256:a2620788d4f0c00bd75fee2dfca61635ab0da856131598c96e2355d5257f70e5"},
+]
+
+[[package]]
+name = "glfw"
+version = "2.8.0"
+summary = "A ctypes-based wrapper for GLFW3."
+groups = ["convert2bop"]
+files = [
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-macosx_10_6_intel.whl", hash = "sha256:28aaef2f022b57cd37525ad1d11ba9049931a273359964fb3cd36762eb093ed1"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-macosx_11_0_arm64.whl", hash = "sha256:0239e478ff065719064fd1272ad29f8542e8178b11c614674bb930d85aa2d1e7"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-manylinux2014_aarch64.whl", hash = "sha256:44b5313cffa4a037e8e2988bccba6fa7de0a24123509f4ccf3e49b831cf72abb"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-manylinux2014_x86_64.whl", hash = "sha256:0fd982cf42a8e3137e05e392280826311961f9e99c82a0ccf22a63a0d2acd143"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-manylinux_2_28_aarch64.whl", hash = "sha256:523e1fc03898bcb0711f78d6f21eee58c1f865bb764cbd36b9549580a4c43454"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-manylinux_2_28_x86_64.whl", hash = "sha256:9cd20351b14587c6fe7063afb33cc03152e38dd2bff2b69613cb044bf3bdb635"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-win32.whl", hash = "sha256:13a75d8d3e8d4bb24595f2354a392ccf7c54ddd20dacb88e1188b760f2a7714b"},
+    {file = "glfw-2.8.0-py2.py27.py3.py30.py31.py32.py33.py34.py35.py36.py37.py38.p39.p310.p311.p312.p313-none-win_amd64.whl", hash = "sha256:1416f10d2c2748c39910e9d9e6a10a5473743c5a745518061e4051be4c5caaa1"},
+    {file = "glfw-2.8.0.tar.gz", hash = "sha256:90e90d328b0b26fed6e1631d21801e2d8a7a0c5dcb480e733c177567ec9666f0"},
 ]
 
 [[package]]
@@ -1554,16 +1571,6 @@ files = [
 ]
 
 [[package]]
-name = "pyglfw"
-version = "0.2.2"
-summary = "Python bindings for the GLFW library"
-groups = ["convert2bop"]
-files = [
-    {file = "pyglfw-0.2.2.tar.gz", hash = "sha256:5c9a7091d10d851f41180a619a56d4decc5c5791774a1c7066dc6537085c9261"},
-    {file = "pyglfw-0.2.2.zip", hash = "sha256:305d87f06cd080709e188122de88a26f8d33ef20c73d5a829551cec84031a341"},
-]
-
-[[package]]
 name = "pygments"
 version = "2.18.0"
 requires_python = ">=3.8"
@@ -1667,24 +1674,6 @@ dependencies = [
 files = [
     {file = "pyrender-0.1.45-py3-none-any.whl", hash = "sha256:5cf751d1f21fba4640e830cef3a0b5a95ed0f05677bf92c6b8330056b4023aeb"},
     {file = "pyrender-0.1.45.tar.gz", hash = "sha256:284b2432bf6832f05c5216c4b979ceb514ea78163bf53b8ce2bdf0069cb3b92e"},
-]
-
-[[package]]
-name = "pysdl2-dll"
-version = "2.30.10"
-summary = "Pre-built SDL2 binaries for PySDL2"
-groups = ["convert2bop"]
-marker = "sys_platform == \"darwin\" and platform_machine == \"arm64\""
-files = [
-    {file = "pysdl2-dll-2.30.10.tar.gz", hash = "sha256:900c8301c6a04d4d3f726aa12f3734f35d42ff827ff873aaaadb4430336ea6c0"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-macosx_10_11_universal2.whl", hash = "sha256:1a97b50a7f601d9f0ab007c44bb4324e61aecb288383e3940b065b77d60dbfb1"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-macosx_10_11_x86_64.whl", hash = "sha256:0fbf259cf73e51b268bd9e121943e61e17b2e65485117841fcb31f89e91ecb06"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-manylinux2014_i686.whl", hash = "sha256:2ba837fb1150218cced4a2b6c95c60b25f5012736df879cba3b77d03315eec9d"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-manylinux2014_x86_64.whl", hash = "sha256:5ab505d17272afad29e8965dfdcb3b6551f29a3fc69a3552b730bdf855b33177"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:b406678e6b49732489f2c6dba217404caa1569a8cab13548f55ed8e4ed91df56"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:1020248bc9794780016d60984df7a4ec6ca768754f8c62120f5a1600e4eb2d5a"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-win32.whl", hash = "sha256:70a448157d4280465d55f1adb431833108d2f846ceca3bfa07573801c2503bbb"},
-    {file = "pysdl2_dll-2.30.10-py2.py3-none-win_amd64.whl", hash = "sha256:e2e44af09ff5513cf6ec3a3cde945edf752dd83fcc7221fb0531cacb1fa2741b"},
 ]
 
 [[package]]

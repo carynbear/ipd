@@ -2,7 +2,8 @@ from collections import defaultdict
 from typing import Literal
 import scipy
 import scipy.optimize
-import lapsolver
+# import lapsolver
+import lap
 from .reader import IPDReader
 import numpy as np
 import pandas as pd
@@ -234,9 +235,18 @@ class PoseMatcher:
         logging.debug(f"Pose distances:\n {pose_distances}")
         logging.debug(f"Pose masked:\n {pose_distances_masked}")
         
+        # def hungarian(matrix, raw_instances, instances):
+        #     raw_ind, true_ind = lapsolver.solve_dense(matrix)
+        #     result = [(raw_instances[i], instances[j]) for i, j in zip(raw_ind, true_ind)]
+        #     return result
+        
         def hungarian(matrix, raw_instances, instances):
-            raw_ind, true_ind = lapsolver.solve_dense(matrix)
-            result = [(raw_instances[i], instances[j]) for i, j in zip(raw_ind, true_ind)]
+            # Use lapjv to get the row assignments (x) and column assignments (y)
+            total_cost, x, y = lap.lapjv(matrix, extend_cost=True)
+            
+            # Create the result as (raw_instance, instance) pairs and calculate the cost
+            result = [(raw_instances[i], instances[x[i]]) for i in range(len(x)) if not np.isnan(matrix[i, x[i]])]
+            
             return result
         
         # returns a list of pairings from raw to true instances
